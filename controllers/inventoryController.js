@@ -96,20 +96,13 @@ async createItem(req, res) {
   async deleteItem(req, res) {
     try {
       const { itemId } = req.params;
-  
-      // Ensure itemId is provided
-      if (!itemId) {
+        if (!itemId) {
         return res.status(400).json({ error: 'Item ID is required.' });
       }
-  
-      // Delete the item by its ID
-      const deletedCount = await item.destroy({ where: { itemId: itemId } });
-  
-      // Check if any rows were affected (i.e., if the item was found and deleted)
-      if (deletedCount === 0) {
+        const deletedCount = await item.destroy({ where: { itemId: itemId } });
+        if (deletedCount === 0) {
         return res.status(404).json({ error: 'Item not found.' });
       }
-  
       // Return success response
       return res.status(200).json({ message: 'Item deleted successfully.' });
     } catch (error) {
@@ -118,9 +111,6 @@ async createItem(req, res) {
     }
   }
 }  
-
-
-
 
   
 module.exports = inventoryController;
