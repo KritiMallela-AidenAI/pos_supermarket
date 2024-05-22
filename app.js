@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const sequelize = require('./config/database');
+require('dotenv').config();
+
 
 const app = express();
 app.use(bodyParser.json());
@@ -9,8 +11,10 @@ app.use(express.json());
 //ROUTES
 const inventoryRoutes = require('./routes/inventoryRoutes');
 const signupRoutes = require('./routes/signupRoutes');
+const loginRoutes = require('./routes/loginRoutes');
 app.use('/', inventoryRoutes);
-app.use('/',signupRoutes);
+app.use('/', signupRoutes);
+app.use('/', loginRoutes);
 
 
 app.use((err, req, res, next) => {
