@@ -8,7 +8,9 @@ app.use(bodyParser.json());
 app.use(express.json());
 //ROUTES
 const inventoryRoutes = require('./routes/inventoryRoutes');
+const signupRoutes = require('./routes/signupRoutes');
 app.use('/', inventoryRoutes);
+app.use('/',signupRoutes);
 
 
 app.use((err, req, res, next) => {

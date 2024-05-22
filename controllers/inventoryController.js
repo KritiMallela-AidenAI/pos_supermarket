@@ -50,21 +50,6 @@ async createItem(req, res) {
     }
   },
 
-  // Get an item by ID
-  async getItemById(req, res) {
-    try {
-      const { id } = req.params;
-      const item = await item.findByPk(id);
-      if (!item) {
-        return res.status(404).json({ error: 'Item not found.' });
-      }
-      return res.status(200).json(item);
-    } catch (error) {
-      console.error('Error getting item by ID:', error);
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
-  },
-
    // Get items by category
    async getItemsByCategory(req, res) {
     try {
@@ -80,8 +65,9 @@ async createItem(req, res) {
   // Search for items by name
   async searchItemsByName(req, res) {
     try {
-      const { name } = req.query;
-      const items = await item.findAll({ where: { name: { [Op.iLike]: `%${name}%` } } });
+      const { name } = req.params;
+      const items = await item.findAll({ where: { name: { [Op.like]: `%${name}%` } } });
+
       return res.status(200).json(items);
     } catch (error) {
       console.error('Error searching items by name:', error);
@@ -90,53 +76,51 @@ async createItem(req, res) {
   },
   
 
-  // Update an item
+  // Update an item by its itemId
   async updateItem(req, res) {
     try {
-      const { id } = req.params;
-      const { name, description, price, category, availability } = req.body;
-
-      // Validate mandatory fields
-      if (!name || !price || !category) {
-        return res.status(400).json({ error: 'Please fill all mandatory fields.' });
-      }
-
-      const item = await item.findByPk(id);
+      const { itemId } = req.params;
+      const { name, quantity, category, price, availability } = req.body;
+      const items = await item.update({ name, quantity, category, price, availability }, { where: { itemId } });
       if (!item) {
         return res.status(404).json({ error: 'Item not found.' });
-      }
+        }
+        return res.status(200).json(item);
+        } catch (error) {
+          console.error('Error updating item:', error);
+          return res.status(500).json({ error: 'Internal Server Error' });
+          }
+        },
 
-      // Update item details
-      item.name = name;
-      item.description = description;
-      item.price = price;
-      item.category = category;
-      item.availability = availability;
-
-      await item.save();
-
-      return res.status(200).json(item);
-    } catch (error) {
-      console.error('Error updating item:', error);
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
-  },
-
-  // Delete an item
+  // Delete an item by itemId
   async deleteItem(req, res) {
     try {
-      const { id } = req.params;
-      const item = await item.findByPk(id);
-      if (!item) {
+      const { itemId } = req.params;
+  
+      // Ensure itemId is provided
+      if (!itemId) {
+        return res.status(400).json({ error: 'Item ID is required.' });
+      }
+  
+      // Delete the item by its ID
+      const deletedCount = await item.destroy({ where: { itemId: itemId } });
+  
+      // Check if any rows were affected (i.e., if the item was found and deleted)
+      if (deletedCount === 0) {
         return res.status(404).json({ error: 'Item not found.' });
       }
-      await item.destroy();
-      return res.status(204).send();
+  
+      // Return success response
+      return res.status(200).json({ message: 'Item deleted successfully.' });
     } catch (error) {
       console.error('Error deleting item:', error);
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   }
-};
+}  
 
+
+
+
+  
 module.exports = inventoryController;

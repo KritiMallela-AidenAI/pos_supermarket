@@ -16,15 +16,12 @@ router.get('/items', itemController.getAllItems);
 router.get('/items/:category', itemController.getItemsByCategory);
 
 // Route to search for items by name
-router.get('/items/:name', itemController.searchItemsByName);
-
-// Route to get a single item by ID
-router.get('/items/:id', itemController.getItemById);
+router.get('/item/:name', itemController.searchItemsByName);
 
 // Route to update an item by ID
-router.put('/items/:id', itemController.updateItem);
+router.put('/item/:itemId', itemController.updateItem);
 
 // Route to delete an item by ID
-router.delete('/items/:id', itemController.deleteItem);
+router.delete('/item/:itemId', itemController.deleteItem);
 
 module.exports = router;
