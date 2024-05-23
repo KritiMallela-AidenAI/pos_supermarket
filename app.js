@@ -13,10 +13,10 @@ const inventoryRoutes = require('./routes/inventoryRoutes');
 const signupRoutes = require('./routes/signupRoutes');
 const loginRoutes = require('./routes/loginRoutes');
 const accountRoutes = require('./routes/accountRoutes');
-app.use('/', inventoryRoutes);
-app.use('/', signupRoutes);
-app.use('/', loginRoutes);
-app.use('/', accountRoutes);
+app.use('/inventory', inventoryRoutes);
+app.use('/signup', signupRoutes);
+app.use('/login', loginRoutes);
+app.use('/account', accountRoutes);
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
