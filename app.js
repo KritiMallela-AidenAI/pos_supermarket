@@ -12,10 +12,11 @@ app.use(express.json());
 const inventoryRoutes = require('./routes/inventoryRoutes');
 const signupRoutes = require('./routes/signupRoutes');
 const loginRoutes = require('./routes/loginRoutes');
+const accountRoutes = require('./routes/accountRoutes');
 app.use('/', inventoryRoutes);
 app.use('/', signupRoutes);
 app.use('/', loginRoutes);
-
+app.use('/', accountRoutes);
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
