@@ -13,11 +13,12 @@ const inventoryRoutes = require('./routes/inventoryRoutes');
 const signupRoutes = require('./routes/signupRoutes');
 const loginRoutes = require('./routes/loginRoutes');
 const accountRoutes = require('./routes/accountRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 app.use('/inventory', inventoryRoutes);
 app.use('/signup', signupRoutes);
 app.use('/login', loginRoutes);
 app.use('/account', accountRoutes);
-
+app.use('/', orderRoutes);
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something broke!');
