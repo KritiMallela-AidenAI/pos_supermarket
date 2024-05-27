@@ -1,4 +1,4 @@
-const Account = require('../models/account'); // Assuming your model is named 'Account'
+const Account = require('../models/account'); 
 const { Op } = require('sequelize');
 
 const accountController = {
@@ -7,7 +7,7 @@ const accountController = {
         try {
             const { number, ifsc, name } = req.body;
             console.log(req.body);
-            const account = await Account.create({ number, ifsc, name }); // Use Account instead of bankAccount
+            const account = await Account.create({ number, ifsc, name }); 
             res.status(200).json({ message: 'Account created successfully', account });
         } catch (error) {
             console.error(error);

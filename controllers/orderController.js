@@ -6,18 +6,17 @@ const Order = require('../models/order');
 function generateNumericOrderId() {
   let orderId = '';
   for (let i = 0; i < 5; i++) {
-    orderId += Math.floor(Math.random() * 10); // Generate a random number between 0 and 9
+    orderId += Math.floor(Math.random() * 10);
   }
   return orderId;
 }
 
 const orderController = {
   async placeOrder(req, res) {
-    const orders = req.body.orders; // Assuming req.body.orders is an array of { itemId, quantity }
-
+    const orders = req.body.orders; 
     try {
       // Generate a single orderId for all the orders
-      const orderId = generateNumericOrderId(); // Generate numeric orderId with 5 characters
+      const orderId = generateNumericOrderId(); 
 
       let totalOrderPrice = 0;
       const createdOrders = [];
@@ -44,8 +43,8 @@ const orderController = {
 
         // Create the order using the generated orderId
         const order = await Order.create({
-          orderId, // Use the same orderId for all orders
-          itemId, // Store itemId for each order
+          orderId, 
+          itemId, 
           quantity,
           totalPrice: totalPriceForItem,
           orderDate: new Date()
@@ -54,7 +53,7 @@ const orderController = {
         createdOrders.push(order);
       }
 
-      return res.status(201).json({ createdOrders, totalOrderPrice, orderId }); // Return orderId along with other details
+      return res.status(201).json({ createdOrders, totalOrderPrice, orderId }); 
     } catch (error) {
       console.error('Failed to place order:', error);
       return res.status(500).json({ error: 'Failed to place order' });

@@ -3,8 +3,6 @@ const { Op } = require('sequelize');
 const multer = require('multer');
 const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require('uuid'); 
-
-// Configure multer to handle file uploads
 const upload = multer();
 
 const signupController = {
@@ -53,7 +51,7 @@ const signupController = {
     // get all the users
 async getAllUsers(req, res) {
     try {
-        const allUsers = await users.findAll(); // Renamed the variable to allUsers
+        const allUsers = await users.findAll(); 
         return res.status(200).json(allUsers);
     } catch (error) {
         console.error('Error in getAllUsers:', error);
