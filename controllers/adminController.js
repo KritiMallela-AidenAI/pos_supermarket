@@ -3,8 +3,9 @@ const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
 const multer = require("multer");
 const upload = multer();
+const jwt = require("jsonwebtoken"); 
 const Admin = require("../models/admin");
-// admin signup
+
 const adminController = {
   admin: async (req, res) => {
     try {
@@ -19,7 +20,6 @@ const adminController = {
         designation,
       } = req.body;
 
-      // Check if file upload succeeded
       if (!req.file) {
         return res.status(400).json({ error: "Please upload an image." });
       }
@@ -28,7 +28,6 @@ const adminController = {
       const uuid = uuidv4();
       const adminId = uuid.substr(0, 6);
 
-      // Read the image file and convert it to base64
       const base64Photo = req.file.buffer.toString("base64");
       const newAdmin = await Admin.create({
         adminId: adminId,
@@ -49,7 +48,36 @@ const adminController = {
       return res.status(500).json({ error: "Internal Server Error" });
     }
   },
-  //view all admins
+
+  adminLogin: async (req, res) => {
+    try {
+      const { emailOrMobile, password } = req.body;
+      const admin = await Admin.findOne({
+        where: {
+          [Op.or]: [{ email: emailOrMobile }, { phoneNumber: emailOrMobile }], 
+        },
+      });
+      if (!admin) {
+        return res.status(400).json({ error: "Invalid email or password." });
+      }
+      const isMatch = await bcrypt.compare(password, admin.password); 
+      console.log('Password Match:', isMatch);
+
+      if (!isMatch) {
+        return res.status(400).json({ message: 'Invalid email/mobileNumber or password' });
+      }
+
+      const token = jwt.sign({ adminId: admin.adminId }, process.env.JWT_SECRET, { expiresIn: '1h' }); 
+      const { password: passkey, ...adminDetails } = admin.toJSON();
+      console.log('User Details:', adminDetails);
+
+      res.status(200).json({ message: 'Login successful', token: token, admin: adminDetails });
+    } catch (error) {
+      console.error('Error in login:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  },
+
   viewAllAdmins: async (req, res) => {
     try {
       const allAdmins = await Admin.findAll();
@@ -60,21 +88,18 @@ const adminController = {
     }
   },
 
-  //view a single admin
   viewSingleAdmin: async (req, res) => {
     try {
       const { adminId } = req.params;
       const singleAdmin = await Admin.findOne({ where: { adminId: adminId } });
       return res.status(200).json(singleAdmin);
     } catch (error) {
-      console.error("Error in viewAllAdmins:", error);
+      console.error("Error in viewSingleAdmin:", error); 
       return res.status(500).json({ error: "Internal Server Error" });
     }
   },
 
-  //  get admin By supermarketName
-
-  getadminBysupermarketName: async (req, res) => {
+  getadminBysupermarketName: async (req, res) => { 
     try {
       const { supermarketName } = req.params;
       const singleAdmin = await Admin.findOne({
@@ -82,12 +107,11 @@ const adminController = {
       });
       return res.status(200).json(singleAdmin);
     } catch (error) {
-      console.error("Error in viewAllAdmins:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
+      console.error("Error in getAdminBySupermarketName:", error); 
+            return res.status(500).json({ error: "Internal Server Error" });
     }
   },
 
-  // update admin
   updateAdmin: async (req, res) => {
     try {
       const { adminId } = req.params;
@@ -95,24 +119,26 @@ const adminController = {
         req.body;
       const updatedAdmin = await Admin.update(
         { supermarketName, firstName, lastName, email, phoneNumber },
-        { where: { adminId } }
+        { where: { adminId: adminId } } 
       );
-      if (!adminId) {
-        return res.status(404).json({ error: "admin not found." });
+      if (!updatedAdmin) { 
+        return res.status(404).json({ error: "Admin not found." }); 
       }
-      return res.status(200).json({ message : "updated Admin details"});
+      return res.status(200).json({ message: "Updated admin details" });
     } catch (error) {
       console.error("Error updating admin:", error);
       return res.status(500).json({ error: "Internal Server Error" });
     }
   },
 
-  // delete admin
   deleteAdmin: async (req, res) => {
     try {
       const { adminId } = req.params;
       const deletedAdmin = await Admin.destroy({ where: { adminId: adminId } });
-      return res.status(200).json({message:"deleted Admin"});
+      if (!deletedAdmin) { 
+        return res.status(404).json({ error: "Admin not found." });
+      }
+      return res.status(200).json({ message: "Deleted admin" });
     } catch (error) {
       console.error("Error in deleteAdmin:", error);
       return res.status(500).json({ error: "Internal Server Error" });

@@ -9,6 +9,9 @@ const upload = multer();
 // Route to create a new admin
 router.post('/admin',upload.single('photo'), adminController.admin);
 
+// Route for admin Login
+router.get('/admin', adminController.adminLogin)
+
 // Route to get all admins
 router.get('/admin', adminController.viewAllAdmins);
 // Route to get single admin by id
