@@ -1,4 +1,4 @@
-const Admin = require('../models/Admin');
+const Admin = require('../models/admin');
 const jwt = require('jsonwebtoken');
 const jwt_secret = process.env.SECRET_KEY;
 
@@ -6,7 +6,7 @@ const isSupermarket = async (req, res, next) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
     const decodedToken = jwt.verify(token, jwt_secret);
-    const admin = await Admin.findOne({ where: { userId: decodedToken.userId } });
+    const admin = await Admin.findOne({ where: { adminId: decodedToken.adminId } });
     if (admin && admin.supermarketName) {
       req.supermarketName = admin.supermarketName;
       next();
