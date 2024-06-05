@@ -16,6 +16,7 @@ const accountRoutes = require('./routes/accountRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const supermarketRoutes = require('./routes/supermarketRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const cartRoutes = require('./routes/cartRoutes');
 app.use('/inventory', inventoryRoutes);
 app.use('/signup', signupRoutes);
 app.use('/login', loginRoutes);
@@ -23,6 +24,7 @@ app.use('/account', accountRoutes);
 app.use('/', orderRoutes);
 app.use('/api', supermarketRoutes);
 app.use('/admin',adminRoutes)
+app.use('/cart', cartRoutes);
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something broke!');
