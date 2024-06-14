@@ -1,41 +1,37 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const { DataTypes, Transaction } = require("sequelize");
+const sequelize = require("../config/database");
+const User = require("./users");
 
-const Payment = sequelize.define('Payment', {
+const payment = sequelize.define("payment", {
+  userId: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    references: {
+      model: User,
+      key: "userId",
+    },
+  },
   paymentId: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    autoIncrement: true
+    autoIncrement: true,
   },
-  orderId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'Order',
-      key: 'order_id'
-    }
-  },
-  paymentDate: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW
-  },
-  amount: {
-    type: DataTypes.FLOAT,
-    allowNull: false
-  },
+
   paymentMethod: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true,
+  },
+  date: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
+  time: {
+    type: DataTypes.TIME,
+    allowNull: false,
   },
   transactionId: {
     type: DataTypes.STRING,
-    allowNull: true
+    allowNull: false,
   },
-  paymentStatus: {
-    type: DataTypes.STRING,
-    allowNull: true
-  }
 });
-
-module.exports = Payment;
+module.exports = payment;

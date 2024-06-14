@@ -15,8 +15,7 @@ const loginRoutes = require('./routes/loginRoutes');
 const accountRoutes = require('./routes/accountRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const supermarketRoutes = require('./routes/supermarketRoutes');
-const paymentsRoutes = require('./routes/paymentsRoutes');
-
+const paymentRoutes = require('./routes/paymentRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 app.use('/inventory', inventoryRoutes);
@@ -25,9 +24,9 @@ app.use('/login', loginRoutes);
 app.use('/account', accountRoutes);
 app.use('/', orderRoutes);
 app.use('/api', supermarketRoutes);
-app.use('/admin',adminRoutes)
+app.use('/admin',adminRoutes);
 app.use('/cart', cartRoutes);
-app.use('/payment', paymentsRoutes);
+app.use('/payments', paymentRoutes); 
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
