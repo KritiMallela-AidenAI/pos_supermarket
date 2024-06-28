@@ -15,7 +15,7 @@ const Admin = sequelize.define('admin', {
     allowNull: false
   },
   phoneNumber: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.INTEGER(20),
     allowNull: false
   },
   email: {

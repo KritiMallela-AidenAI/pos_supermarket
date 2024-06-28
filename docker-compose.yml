@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=192.168.1.6
+      - DB_PORT=3307
+      - DB_USER=root
+      - DB_PASS=Ravi@1819
+      - DB_NAME=pos_supermarket
+
+volumes:
+  mysql_data:
