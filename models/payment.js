@@ -33,5 +33,9 @@ const payment = sequelize.define("payment", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  photo: {
+    type: DataTypes.BLOB,
+    allowNull:true,
+  }
 });
 module.exports = payment;
